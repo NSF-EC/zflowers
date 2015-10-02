@@ -116,6 +116,7 @@ define(['HexCellBuilder', 'ColorScale', 'd3', 'd3-tip', 'underscore'], function 
     this.chart         = chart;
     this.plotContainer = plotContainer;
     this.svg           = svg;
+    this.tooltip       = undefined;
 
     if (typeof(config.tooltip) !== 'undefined') {
 
@@ -129,30 +130,34 @@ define(['HexCellBuilder', 'ColorScale', 'd3', 'd3-tip', 'underscore'], function 
       var ttelement = d3.select('div.' + config.tooltip);
       // console.log("found tooltip element ", ttelement);
 
-      var html = ttelement.html();
-      var template = us.template(us.unescape(html));
+      if (typeof(ttelement) !== 'undefined' && ttelement.node()) {
 
-      //
-      // create a new div for the tooltip
-      // based on the template div
-      //
-      var tooltip = d3tip().html(function (d) {
+        var html = ttelement.html();
+        var template = us.template(us.unescape(html));
 
-            var v = parseFloat(Math.round(d.userData.value * 100) / 100).toFixed(2);
-            var out = template({ value: v,
-              id: d.userData.id});
-            return out;
-          }
-        )
-          .attr('class', config.tooltip)
-          .offset([0, 0])
-        ;
+        //
+        // create a new div for the tooltip
+        // based on the template div
+        //
+        var tooltip = d3tip().html(function (d) {
 
-      svg.call(tooltip);
-      this.tooltip = tooltip;
-    }else {
-      // console.log("no tooltip installed");
-      this.tooltip = undefined;
+              var v = parseFloat(Math.round(d.userData.value * 100) / 100).toFixed(2);
+              var tdata = {
+                value: v,
+                id: d.userData.id
+              };
+              var out = template(tdata);
+              return out;
+            }
+          ).attr('class', config.tooltip)
+            .offset([0, 0])
+          ;
+
+        svg.call(tooltip);
+        this.tooltip = tooltip;
+
+      }
+
     }
 
 

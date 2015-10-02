@@ -1,0 +1,13 @@
+# Created by .ignore support plugin (hsz.mobi)
+# vim temporary files
+*~
+.DS_Store
+# WebStorm files
+*.idea
+*.seed
+*.log
+*.csv
+*.dat
+*.out
+*.pid
+*.gz
